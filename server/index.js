@@ -19,29 +19,30 @@ const connection = mySql.createPool({
 }).promise()
 app.post("/userInfo", async (req, res) => {
     try {
+        const casted_at = new Date().toLocaleDateString()
         const { name, voting_choice } = req.body
 
-        const [dupeVerification] = await connection.query(`SELECT * FROM votes WHERE name = ?`, [name])
-        if (dupeVerification.length) {
-            res.json({
-                message: `Voting already has been done by ${name}`
-            })
-            return
-        }
 
-        const casted_at = new Date().toLocaleDateString()
-        if (name, voting_choice) {
-            await connection.query(`INSERT INTO VOTES( name, voting_choice, casted_at  )
+        if (name) {
+            const [dupeVerification] = await connection.query(`SELECT * FROM votes WHERE name = ?`, [name])
+            if (dupeVerification.length) {
+                return res.status(409).json({
+                    message: `Voting already has been done by ${name}`
+                })
+
+            }
+
+            await connection.query(`INSERT INTO votes( name, voting_choice, casted_at  )
         VALUES(?, ?, ?)`, [name, voting_choice, casted_at])
 
 
-            res.json({
+            return res.json({
                 message: "User Voting is saved successfully",
 
             })
         }
         else {
-            res.json({
+            return res.json({
                 message: "bad request"
             })
         }
@@ -53,16 +54,16 @@ app.post("/userInfo", async (req, res) => {
 app.get("/", async (req, res) => {
     try {
 
-        const [data] = await connection.query(`SELECT * FROM VOTES`)
+        const [data] = await connection.query(`SELECT * FROM votes`)
         const [votes] = await connection.query(`SELECT voting_choice, COUNT(voting_choice) FROM votes GROUP BY voting_choice`)
-        const totalVotes = votes.map((item, index) => item["COUNT(voting_choice)"]).reduce((acc, curr) => acc+curr)
+        const totalVotes = votes.length && votes.map((item) => item["COUNT(voting_choice)"]).reduce((acc, curr) => acc + curr)
         return res.json({
             data,
             votes,
             totalVotes
         })
     } catch (error) {
-
+        console.log(error)
     }
 })
 

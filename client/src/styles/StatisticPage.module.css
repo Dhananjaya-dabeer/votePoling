@@ -1,0 +1,33 @@
+.parent {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .tableChild {
+        width: 60%;
+    }
+}
+
+.chartCotainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .barChartContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .barChart {
+            width: 50%;
+        }
+    }
+
+}
