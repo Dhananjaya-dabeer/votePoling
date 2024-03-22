@@ -38,7 +38,7 @@ const StatisticPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        const getData = await axios.get("http://localhost:4001");
+        const getData = await axios.get("https://votepoling.onrender.com");
         const transformData = getData.data?.data?.map((rows) => ({
           ...rows,
           voting_choice: rows.voting_choice === 1,

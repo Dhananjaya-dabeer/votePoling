@@ -15,7 +15,7 @@ const VotingPage = () => {
       return;
     }
     try {
-      const postData = await axios.post(`http://localhost:4001/userInfo`, data);
+      const postData = await axios.post(`https://votepoling.onrender.com/userInfo`, data);
       if (postData.status === 200) {
         postData.data.message && alert(postData.data.message);
         navigate("/stat");

@@ -73,18 +73,6 @@ app.get("/", async (req, res) => {
 
 
 
-
-// CREATE DATABASE votingpool;
-// USE votingpool;
-// CREATE TABLE VOTES(
-//  id INT NOT NULL AUTO_INCREMENT,
-//  name VARCHAR(30) NOT NULL,
-//  voting_choice BOOLEAN NOT NULL,
-//  casted_at VARCHAR(20) NOT NULL,
-//  PRIMARY KEY (id)
-// );
-
-
 app.listen(process.env.PORT || 4001, () => {
     console.log("server running on port 4001")
 })
