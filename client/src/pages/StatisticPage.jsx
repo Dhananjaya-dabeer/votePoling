@@ -18,11 +18,9 @@ const StatisticPage = () => {
     datasets: [
       {
         label: "Yes",
-        data: rows
-          .filter((item) => item.voting_choice == true)
-          .map((item) => item.casted_at),
+        data: "",
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "green",
         tension: 0.1,
       },
       {
@@ -31,7 +29,7 @@ const StatisticPage = () => {
           .filter((item) => item.voting_choice == false)
           .map((item) => item.casted_at),
         fill: false,
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "red",
         tension: 0.1,
       },
     ],
@@ -62,6 +60,35 @@ const StatisticPage = () => {
                 trueCount[0]["COUNT(voting_choice)"],
                 falseCount[0]["COUNT(voting_choice)"],
               ],
+            },
+          ],
+        });
+
+        const trueVotes = getData.data.DateTrueVotes.reduce((acc, item) => {
+          acc[item.casted_at] = item["COUNT(casted_at)"];
+          return acc;
+        }, {});
+        const falseVotes = getData.data.DateFalseVotes.reduce((acc, item) => {
+          acc[item.casted_at] = item["COUNT(casted_at)"];
+          return acc;
+        }, {});
+  
+        const dates = [...new Set([...Object.keys(trueVotes), ...Object.keys(falseVotes)])];
+        const votesYes = dates.map((date) => trueVotes[date] || 0);
+        const votesNo = dates.map((date) => falseVotes[date] || 0);
+  
+
+        setLine({
+          ...line,
+          labels: dates,
+          datasets: [
+            {
+              ...line.datasets[0],
+              data: votesYes,
+            },
+            {
+              ...line.datasets[1],
+              data: votesNo,
             },
           ],
         });

@@ -57,10 +57,14 @@ app.get("/", async (req, res) => {
         const [data] = await connection.query(`SELECT * FROM votes`)
         const [votes] = await connection.query(`SELECT voting_choice, COUNT(voting_choice) FROM votes GROUP BY voting_choice`)
         const totalVotes = votes.length && votes.map((item) => item["COUNT(voting_choice)"]).reduce((acc, curr) => acc + curr)
+        const [DateTrueVotes] = await connection.query('SELECT casted_at, COUNT(casted_at) FROM votes WHERE voting_choice = 1 GROUP BY casted_at')
+        const [DateFalseVotes] = await connection.query('SELECT casted_at, COUNT(casted_at) FROM votes WHERE voting_choice = 0 GROUP BY casted_at')
         return res.json({
             data,
             votes,
-            totalVotes
+            totalVotes,
+            DateTrueVotes,
+            DateFalseVotes
         })
     } catch (error) {
         console.log(error)
